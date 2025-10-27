@@ -130,21 +130,35 @@ STATIC_URL = 'static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-
-# CORS Settings - Allow React (port 3000) to communicate with Django (port 8000)
-CORS_ALLOWED_ORIGINS = [
-    "http://localhost:3000",      # React development server
-    "http://127.0.0.1:3000",      # Alternative localhost
-]
-
-CORS_ALLOW_CREDENTIALS = True      # Allow cookies/authentication
-
 # REST Framework Settings
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'rest_framework.authentication.SessionAuthentication',
     ],
     'DEFAULT_PERMISSION_CLASSES': [
-        'rest_framework.permissions.IsAuthenticatedOrReadOnly',
+        'rest_framework.permissions.AllowAny',  # Changed from IsAuthenticatedOrReadOnly
     ],
 }
+AUTH_USER_MODEL = 'users.CustomUser'
+
+# CORS Settings (should be at bottom of settings.py)
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:3000",
+    "http://127.0.0.1:3000",
+]
+
+
+CORS_ALLOW_CREDENTIALS = True
+
+# Session cookie settings
+SESSION_COOKIE_HTTPONLY = True
+SESSION_COOKIE_SAMESITE = 'Lax'  # Allows cookies in cross-origin requests
+SESSION_COOKIE_SECURE = False  # Set to True in production with HTTPS
+
+# CSRF settings for development
+CSRF_COOKIE_HTTPONLY = False
+CSRF_COOKIE_SAMESITE = 'Lax'
+CSRF_TRUSTED_ORIGINS = [
+    'http://localhost:3000',
+    'http://127.0.0.1:3000',
+]
